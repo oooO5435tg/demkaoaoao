@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -56,41 +57,53 @@ $this->params['breadcrumbs'][] = $this->title;
     } else if (!Yii::$app->user->isGuest && !Yii::$app->user->identity->isAdmin())
     {
         echo Html::a('Подать заявку', ['create'], ['class' => 'btn btn-success']);
-        echo GridView::widget([
+        echo ListView::widget([
         'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        'options' => ['class' => 'row g-4'],
+        'itemOptions' => ['class' => 'col-md-4'],
+        'itemView' => function ($model, $key, $index, $widget) {
+            return '
+            <div class="card shadow-sm">
+                <p>Название: </p>' . $model->name .'
+                <p>Автор: </p>' . $model->author .'
+                <p>Статус: </p>' . $model->status_id .'
+                <p>Удалено: </p>' . $model->isDelete .'
+            </div>
+            ';
+        }
+        // 'columns' => [
+        //     ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'name',
-            'author',
-            'publication',
-            'publisher',
-            //'year_publication',
-            //'publication_status',
-            //'condition_id',
-            //'status_id',
-            //'binding_id',
-            //'cancellation_reason',
-            //'user_id',
-            'isDelete',
-            [
-                'class' => ActionColumn::className(),
-                'template' => '{delete}',
-                'urlCreator' => function ($action, Card $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                },
-                'buttons' => [
-                    'delete' => function($url, $model)
-                    {
-                        if ($model->isDelete == 0)
-                        {
-                            return Html::a('<span class="btn btn-primary" type="button">Удалить карточку</span>', $url);
-                        }
-                    }
-                ]
-            ],
-        ],
+        //     'id',
+        //     'name',
+        //     'author',
+        //     'publication',
+        //     'publisher',
+        //     //'year_publication',
+        //     //'publication_status',
+        //     //'condition_id',
+        //     //'status_id',
+        //     //'binding_id',
+        //     //'cancellation_reason',
+        //     //'user_id',
+        //     'isDelete',
+        //     [
+        //         'class' => ActionColumn::className(),
+        //         'template' => '{delete}',
+        //         'urlCreator' => function ($action, Card $model, $key, $index, $column) {
+        //             return Url::toRoute([$action, 'id' => $model->id]);
+        //         },
+        //         'buttons' => [
+        //             'delete' => function($url, $model)
+        //             {
+        //                 if ($model->isDelete == 0)
+        //                 {
+        //                     return Html::a('<span class="btn btn-primary" type="button">Удалить карточку</span>', $url);
+        //                 }
+        //             }
+        //         ]
+        //     ],
+        // ],
         ]);
     }
 

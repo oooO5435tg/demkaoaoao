@@ -62,12 +62,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['class' => 'row g-4'],
         'itemOptions' => ['class' => 'col-md-4'],
         'itemView' => function ($model, $key, $index, $widget) {
+            $delete = ($model->isDelete == 0) ? Html::button('Удалить карточку', ['delete', 'id' => $model->id]) : "";
             return '
             <div class="card shadow-sm">
                 <p>Название: </p>' . $model->name .'
                 <p>Автор: </p>' . $model->author .'
                 <p>Статус: </p>' . $model->status_id .'
                 <p>Удалено: </p>' . $model->isDelete .'
+                '. $delete .'
             </div>
             ';
         }
